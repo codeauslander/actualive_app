@@ -1,24 +1,15 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Repository for the project Actualive.
 
-Things you may want to cover:
 
-* Ruby version
+* cd /rails_appointment_app
 
-* System dependencies
+  ** running instructions
 
-* Configuration
+    *** bundle exec 
+    *** rake db:create
+    *** rake db:migrate
+    *** rails server
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* spring_appointment_app
