@@ -27,7 +27,7 @@ class AppointmentsController < ApplicationController
     @appointment = Appointment.new(appointment_params)
 
     respond_to do |format|
-      if @appointment.save
+      if check_schedule && @appointment.save
         format.html { redirect_to @appointment, notice: 'Appointment was successfully created.' }
         format.json { render :show, status: :created, location: @appointment }
       else
@@ -69,6 +69,42 @@ class AppointmentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def appointment_params
-      params.require(:appointment).permit(:name, :description, :type, :start_time, :end_time, :room_id, :user_id)
+      params.require(:appointment).permit(:name, :description, :kind, :start_time, :end_time, :room_id, :user_id)
     end
+
+    def user_appointments
+      User.find(appointment_params[:user_id]).appointments
+    end
+
+    def room_appointments
+      Room.find(appointment_params[:room_id]).appointments
+    end
+
+    def intersection_times (new_start, new_end, old_start, old_end )
+      return true if (old_start == nil || old_end == nil)
+      (new_start <= old_start && new_end <= old_start) || 
+      (new_start >= old_end && new_end >= old_end)
+    end
+
+    def check_schedule
+      check_user_appointments = user_appointments.all? { |appointment| 
+        intersection_times(
+          @appointment.start_time, 
+          @appointment.end_time, 
+          appointment.start_time, 
+          appointment.end_time
+      )}
+
+      check_room_appointments = room_appointments.all? { |appointment| 
+        intersection_times(
+          @appointment.start_time, 
+          @appointment.end_time, 
+          appointment.start_time, 
+          appointment.end_time
+      )}
+      puts "check_user_appointments #{check_user_appointments} && check_room_appointments #{check_room_appointments}"
+
+      check_user_appointments && check_room_appointments
+    end
+
 end
