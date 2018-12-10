@@ -1,12 +1,12 @@
-Vue.component('app-home', {
-  template: '#grid-template',
+var Home = Vue.component('appointments', {
+  template: '#appointments',
   props: {
     data: Array,
     columns: Array,
     filterKey: String
   },
   data: function() {
-    var sortOrders = {}
+    var sortOrders = {};
     this.columns.forEach(function(key) {
       sortOrders[key] = 1;
     });
@@ -54,8 +54,8 @@ Vue.component('app-home', {
   }
 });
 
-Vue.component('signup-page', {
-  template: '#signup-page',
+var Signup = Vue.component('signup', {
+  template: '#signup',
   data: function() {
     return {
       name: "",
@@ -74,7 +74,7 @@ Vue.component('signup-page', {
         password_confirmation: this.passwordConfirmation
       };
       axios
-        .post("/users", params)
+        .post("/users.json", params)
         .then(function(response) {
           router.push("/login");
         })
@@ -87,8 +87,8 @@ Vue.component('signup-page', {
   }
 });
 
-Vue.component('login-page', {
-  template: '#login-page',
+var Login = Vue.component('login', {
+  template: '#login',
   data: function() {
     return {
       email: "",
@@ -108,6 +108,7 @@ Vue.component('login-page', {
             "Bearer " + response.data.jwt;
           localStorage.setItem("jwt", response.data.jwt);
           router.push("/");
+          console.log(localStorage.getItem("jwt"));
         })
         .catch(
           function(error) {
@@ -120,23 +121,28 @@ Vue.component('login-page', {
   }
 });
 
-Vue.component('logout-page', {
-  template: '#app-home',
+var Logout = Vue.component('logout', {
+  template: '#appointments',
   created: function() {
     axios.defaults.headers.common["Authorization"] = undefined;
     localStorage.removeItem("jwt");
     router.push("/");
+    console.log('token removed');
+    console.log(localStorage.getItem("jwt"));
   }
 });
 
 var router = new VueRouter({
   routes: [
-    { path: "/", component: Vue.component('app-home') },
-
-    { path: "/signup", component: Vue.component('signup-page') },
-    { path: "/login", component: Vue.component('login-page') },
-    { path: "/logout", component: Vue.component('logout-page') }
+    { path: "/", component: Home },
+    { path: "/home", component: Home },
+    { path: "/signup", component: Signup },
+    { path: "/login", component: Login },
+    { path: "/logout", component: Logout }
   ],
+  scrollBehavior: function(to, from, savedPosition) {
+    return { x: 0, y: 0 };
+  }
 });
 
 var app = new Vue({
@@ -183,37 +189,4 @@ var app = new Vue({
       })
       .finally(() => this.loading = false);
   },
-  // methods: {
-  //   getAppointments: function() {
-  //     // console.log(this.gridData = [{name:'hey'}]);
-  //     axios
-  //       .get("/appointments.json")
-  //       .then(function(response) {
-  //         console.log(response.data);
-  //         console.log(this.gridData);
-
-  //         return this.gridData = response.data;
-
-  //         // response.data.forEach(function(key) {
-  //         //   this.gridData.push(key);
-  //         // });
-
-  //         // this.gridData = [
-  //         //   { name: 'Chuck Norris', power: Infinity },
-  //         //   { name: 'Bruce Lee', power: 9000 },
-  //         //   { name: 'Jackie Chan', power: 7000 },
-  //         //   { name: 'Jet Li', power: 8000 }
-  //         // ];
-
-  //       })
-  //       .catch(
-  //         function(error) {
-  //           // this.errors = ["Invalid email or password."];
-  //           // this.email = "";
-  //           // this.password = "";
-  //           console.log('error yarayara',error);
-  //         }
-  //       );
-  //   },
-  // },
 });

@@ -8,21 +8,42 @@
   <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.js"></script>
   <script src="index.js" defer></script>
-
   <link rel="stylesheet" href="index.css">
+  
+  <!-- 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+   -->
   
 </head>
 <body>
   <div id="vue-app">
 
-    <router-view></router-view>
+    <!-- <router-view></router-view> -->
+
+    <!-- app root element -->
+    <div id="app">
+      <form id="search">
+        Search <input name="query" v-model="searchQuery">
+      </form>
+
+      <router-view></router-view>
+
+      <appointments
+        :data="gridData"
+        :columns="gridColumns"
+        :filter-key="searchQuery">
+      </appointments>
+      
+    </div>
 
   </div>
 </body>
 </html>
 
 <!-- component template -->
-<script type="text/x-template" id="grid-template">
+<script type="text/x-template" id="appointments">
   <table>
     <thead>
       <tr>
@@ -45,7 +66,7 @@
   </table>
 </script>
 
-<script type="text/x-template" id="signup-page">
+<script type="text/x-template" id="signup">
   <!-- <div class="vue-component"> -->
     <div class="container ">
       <div class="row justify-content-center">
@@ -73,7 +94,7 @@
   <!-- </div> -->
 </script>
 
-<script type="text/x-template" id="login-page">
+<script type="text/x-template" id="login">
   <!-- <div class="vue-component"> -->
     <div class="container ">
       <div class="row justify-content-center">
@@ -99,14 +120,3 @@
   <!-- </div> -->
 </script>
 
-<!-- app root element -->
-<div id="app">
-  <form id="search">
-    Search <input name="query" v-model="searchQuery">
-  </form>
-  <app-home
-    :data="gridData"
-    :columns="gridColumns"
-    :filter-key="searchQuery">
-  </app-home>
-</div>
