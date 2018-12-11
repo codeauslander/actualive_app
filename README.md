@@ -7,7 +7,7 @@ Repository for the project Actualive.
 
   ** running instructions
 
-    *** bundle exec 
+    *** bundle install
     *** rake db:create
     *** rake db:migrate
     *** rails server
