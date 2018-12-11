@@ -1,4 +1,38 @@
-var Home = Vue.component('appointments', {
+var Home = Vue.component('home',{ 
+  template: '#home',
+  data: function() {
+    return {
+      searchQuery: '',
+      gridColumns: [ 
+        // 'id', 
+        'name', 
+        'kind', 
+        'description', 
+        'start_time', 
+        'end_time', 
+        'room_id', 
+        'user_id', 
+        // 'url', 
+        // 'created_at', 
+        // 'updated_at'
+      ],
+      gridData: [],
+      loading: true,
+  }},
+  mounted () {
+    axios
+      .get('/appointments.json')
+      .then(response => {
+        this.gridData = response.data;
+      })
+      .catch(error => {
+        console.log(error)
+      })
+      .finally(() => this.loading = false);
+  },
+});
+
+var Appointments = Vue.component('appointments', {
   template: '#appointments',
   props: {
     data: Array,
@@ -15,9 +49,7 @@ var Home = Vue.component('appointments', {
       sortOrders: sortOrders
     };
   },
-  created: function() {
-    // this.getAppointments();
-  },
+  created: function() {},
   computed: {
     filteredData: function() {
       var sortKey = this.sortKey;
@@ -28,7 +60,7 @@ var Home = Vue.component('appointments', {
         data = data.filter(function(row) {
           return Object.keys(row).some(function(key) {
             return String(row[key]).toLowerCase().indexOf(filterKey) > -1
-          })
+          });
         })
       }
       if (sortKey) {
@@ -58,10 +90,12 @@ var Signup = Vue.component('signup', {
   template: '#signup',
   data: function() {
     return {
-      name: "",
+      name: "test",
       email: "",
       password: "",
       passwordConfirmation: "",
+      kind: 1, 
+      availability: true,
       errors: []
     };
   },
@@ -71,11 +105,17 @@ var Signup = Vue.component('signup', {
         name: this.name,
         email: this.email,
         password: this.password,
-        password_confirmation: this.passwordConfirmation
+        password_confirmation: this.passwordConfirmation,
+        kind: this.kind, 
+        availability: this.availability,
       };
+
+      console.log(params);
+
       axios
         .post("/users.json", params)
         .then(function(response) {
+          console.log(response.data);
           router.push("/login");
         })
         .catch(
@@ -150,43 +190,9 @@ var app = new Vue({
   router: router,
   created: function() {
     var jwt = localStorage.getItem("jwt");
-    console.log(jwt);
+    console.log('Current jwt',jwt);
     if (jwt) {
       axios.defaults.headers.common["Authorization"] = jwt;
     }
-  },
-  data: {
-  // data: function() {
-    // return {
-    searchQuery: '',
-    gridColumns: [ 
-      // 'id', 
-      'name', 
-      'kind', 
-      'description', 
-      'start_time', 
-      'end_time', 
-      'room_id', 
-      'user_id', 
-      // 'url', 
-      // 'created_at', 
-      // 'updated_at'
-    ],
-    gridData: [],
-    loading: true,
-
-    // };
-  },
-  mounted () {
-    axios
-      .get('/appointments.json')
-      .then(response => {
-        this.gridData = response.data;
-      })
-      .catch(error => {
-        console.log(error)
-        // this.errored = true
-      })
-      .finally(() => this.loading = false);
   },
 });

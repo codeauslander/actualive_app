@@ -17,33 +17,30 @@
    -->
   
 </head>
-<body>
-  <div id="vue-app">
-
-    <!-- <router-view></router-view> -->
-
+  <body>
     <!-- app root element -->
     <div id="app">
-      <form id="search">
-        Search <input name="query" v-model="searchQuery">
-      </form>
-
-      <router-view></router-view>
-
-      <appointments
-        :data="gridData"
-        :columns="gridColumns"
-        :filter-key="searchQuery">
-      </appointments>
-      
+        <router-view></router-view>
+        
     </div>
-
-  </div>
-</body>
+  </body>
 </html>
 
-<!-- component template -->
-<script type="text/x-template" id="appointments">
+<template  id="home">
+  <div>
+      <form >
+          Search <input name="query" v-model="searchQuery">
+        </form>
+          
+        <appointments
+          :data="gridData"
+          :columns="gridColumns"
+          :filter-key="searchQuery">
+        </appointments>
+  </div>
+</template>
+
+<template  id="appointments">
   <table>
     <thead>
       <tr>
@@ -64,59 +61,55 @@
       </tr>
     </tbody>
   </table>
-</script>
+</template>
 
-<script type="text/x-template" id="signup">
-  <!-- <div class="vue-component"> -->
-    <div class="container ">
-      <div class="row justify-content-center">
-        <div class="col-6 card">
+<template  id="signup">
+    <div class="">
+      <div class="">
+        <div class="">
            <h1>Signup</h1>
         <ul>
-          <li class="text-danger" v-for="error in errors">{{ error }}</li>
+          <li class="" v-for="error in errors">{{ error }}</li>
         </ul>
-        <div class="form-group">
+        <div class="">
           <label>Email:</label>
-          <input type="email" class="form-control" v-model="email">
+          <input type="email" class="" v-model="email">
         </div>
-        <div class="form-group">
+        <div class="">
           <label>Password:</label>
-          <input type="password" class="form-control" v-model="password">
+          <input type="password" class="" v-model="password">
         </div>
-        <div class="form-group">
+        <div class="">
           <label>Password confirmation:</label>
-          <input type="password" class="form-control" v-model="passwordConfirmation">
+          <input type="password" class="" v-model="passwordConfirmation">
         </div>
-        <button class="col-3 btn btn-primary" v-on:click="submit()">Submit</button>
+        <button class="" v-on:click="submit()">Submit</button>
         </div>
       </div>
     </div>
-  <!-- </div> -->
-</script>
+</template>
 
-<script type="text/x-template" id="login">
-  <!-- <div class="vue-component"> -->
-    <div class="container ">
-      <div class="row justify-content-center">
-        <div class="col-6 card"> 
+<template  id="login">
+    <div class="">
+      <div class="">
+        <div class=""> 
           <h1>Login</h1>
           <ul>
-            <li class="text-danger" v-for="error in errors">{{ error }}</li>
+            <li class="" v-for="error in errors">{{ error }}</li>
           </ul>
         
-          <div class="form-group">
+          <div class="">
             <label>Email:</label>
-            <input type="email" class="form-control" v-model="email">
+            <input type="email" class="" v-model="email">
           </div>
-          <div class="form-group">
+          <div class="">
             <label>Password:</label>
-            <input type="password" class="form-control" v-model="password">
+            <input type="password" class="" v-model="password">
           </div>
           <button class="btn btn-primary" v-on:click="submit()">Submit</button>
         </div>
       </div>
       
     </div>
-  <!-- </div> -->
-</script>
+</template>
 
