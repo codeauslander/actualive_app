@@ -37,6 +37,8 @@
           :columns="gridColumns"
           :filter-key="searchQuery">
         </appointments>
+
+        <breaks :data="gridData"></breaks>
   </div>
 </template>
 
@@ -112,4 +114,25 @@
       
     </div>
 </template>
+
+<template  id="breaks">
+  <table>
+    <thead>
+      <tr>
+        <th>Breaks</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="break in breaks" v-if="isBreak(break)">
+        <td>
+          {{break.name}}
+        </td>
+        <td>
+          {{break.type}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</template>
+
 

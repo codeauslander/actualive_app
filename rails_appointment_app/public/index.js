@@ -86,6 +86,21 @@ var Appointments = Vue.component('appointments', {
   }
 });
 
+var Breaks = Vue.component('breaks', {
+  template: '#breaks',
+  props: { data: Array, },
+  data: function() {},
+  created: function() {
+  },
+  computed: {},
+  filters: {},
+  methods: {
+    isBreak: function(appointment) {
+      return appointment.kind === 3;
+    },
+  }
+});
+
 var Signup = Vue.component('signup', {
   template: '#signup',
   data: function() {
