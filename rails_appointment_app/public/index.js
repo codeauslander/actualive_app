@@ -1,3 +1,10 @@
+// import socketio from 'socket.io';
+// import VueSocketIO from 'vue-socket.io';
+// Vue.use(VueSocketIO, SocketInstance);
+// var http = require("http");
+// var url = require('url');
+// var fs = require('fs');
+
 var Home = Vue.component('home',{ 
   template: '#home',
   data: function() {
@@ -18,8 +25,10 @@ var Home = Vue.component('home',{
       ],
       gridData: [],
       loading: true,
-  }},
+    };
+  },
   mounted () {
+    // this.$socket.emit('pingServer', 'PING!'); 
     axios
       .get('/appointments.json')
       .then(response => {
@@ -89,14 +98,31 @@ var Appointments = Vue.component('appointments', {
 var Breaks = Vue.component('breaks', {
   template: '#breaks',
   props: { data: Array, },
-  data: function() {},
+  // data: function() {},
   created: function() {
   },
   computed: {},
   filters: {},
   methods: {
     isBreak: function(appointment) {
+      console.log(appointment);
       return appointment.kind === 3;
+    },
+  }
+});
+
+var TwoPeopleMeeting = Vue.component('two-people-meeting', {
+  template: '#two-people-meeting',
+  props: { data: Array, },
+  // data: function() {},
+  created: function() {
+  },
+  computed: {},
+  filters: {},
+  methods: {
+    isSmallMeeting: function(appointment) {
+      console.log(appointment);
+      return appointment.kind === 2;
     },
   }
 });

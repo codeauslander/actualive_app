@@ -4,9 +4,13 @@
   <meta charset="UTF-8">
   <title>My App</title>
   
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+  <script src="https://unpkg.com/vue-socket.io@3.0.4/dist/vue-socketio.js"></script>
   <script src="https://unpkg.com/vue/dist/vue.js"></script>
   <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.js"></script>
+  
+
   <script src="index.js" defer></script>
   <link rel="stylesheet" href="index.css">
   
@@ -31,14 +35,23 @@
       <form >
           Search <input name="query" v-model="searchQuery">
         </form>
-          
-        <appointments
+
+        <div >
+          <breaks style="float: left" :data="gridData"></breaks>
+          <appointments
           :data="gridData"
           :columns="gridColumns"
           :filter-key="searchQuery">
         </appointments>
+          
+        </div>
 
-        <breaks :data="gridData"></breaks>
+        <two-people-meeting :data="gridData"></two-people-meeting>
+        
+          
+        
+
+        
   </div>
 </template>
 
@@ -116,23 +129,62 @@
 </template>
 
 <template  id="breaks">
+  <!-- <div>Hey</div> -->
   <table>
     <thead>
       <tr>
         <th>Breaks</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Timer</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="break in breaks" v-if="isBreak(break)">
+      <tr v-for="appointment in data" v-if="isBreak(appointment)">
         <td>
-          {{break.name}}
+          {{appointment.name}}
         </td>
         <td>
-          {{break.type}}
+          {{appointment.start_time}}
+        </td>
+        <td>
+          {{appointment.end_time}}
+        </td>
+        <td>
+          
         </td>
       </tr>
     </tbody>
   </table>
 </template>
 
+<template  id="two-people-meeting">
+  <!-- <div>Hey</div> -->
+  <table>
+    <thead>
+      <tr>
+        <th>Meeting</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Room</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="appointment in data" v-if="isSmallMeeting(appointment)">
+        <td>
+          {{appointment.name}}
+        </td>
+        <td>
+          {{appointment.start_time}}
+        </td>
+        <td>
+          {{appointment.end_time}}
+        </td>
+        <td>
+          {{appointment.room}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</template>
 
