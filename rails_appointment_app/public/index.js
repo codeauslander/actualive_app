@@ -4,6 +4,17 @@
 // var http = require("http");
 // var url = require('url');
 // var fs = require('fs');
+// console.log(ActionCable);
+// const ActionCable = require('actioncable'); 
+
+(function() {
+  this.App || (this.App = {});
+
+  App.cable = ActionCable.createConsumer();
+
+}).call(this);
+
+var cable = ActionCable.createConsumer('ws://localhost:3000/cable');
 
 var Home = Vue.component('home',{ 
   template: '#home',
@@ -27,7 +38,7 @@ var Home = Vue.component('home',{
       loading: true,
     };
   },
-  mounted () {
+  mounted() {
     // this.$socket.emit('pingServer', 'PING!'); 
     axios
       .get('/appointments.json')
@@ -35,10 +46,58 @@ var Home = Vue.component('home',{
         this.gridData = response.data;
       })
       .catch(error => {
-        console.log(error)
+        console.log(error);
       })
       .finally(() => this.loading = false);
+
+    App.room = App.cable.subscriptions.create("AppointmentChannel", {
+      connected: function() {
+        // Called when the subscription is ready for use on the server
+        console.log('connected');
+      },
+      
+      disconnected: function() {
+        // Called when the subscription has been terminated by the server
+      },
+      
+      received: function(data) {
+        // Called when there's incoming data on the websocket for this channel
+        console.log('received',data);
+        this.gridData.
+      },
+      
+      speak: function(message) {
+        console.log('speak');
+      },
+    });
+      
+    // (function() {
+    //   document.addEventListener('keypress', function(event) {
+    //     // document.addEventListener('keypress','[data-behaivoir~=room_speaker]', function(event) {
+    //     if (event.keyCode === 13) {
+    //       // console.log(App.room);
+    //       App.room.speak(event.target.value);
+    //       event.target.value = '';
+    //       return event.preventDefault();
+    //     }
+    //   });
+      
+    // }).call(this);
+
   },
+  methods: {
+    subscribe: function() {
+      cable.subscriptions.create('AppointmentChannel', {
+        connected: function() {
+          console.log('connected to rails actioncable Yay!');   
+        } ,
+        received: function(data) {
+          console.log(data);
+        }          
+      });        
+    }
+  }
+  
 });
 
 var Appointments = Vue.component('appointments', {
@@ -62,20 +121,20 @@ var Appointments = Vue.component('appointments', {
   computed: {
     filteredData: function() {
       var sortKey = this.sortKey;
-      var filterKey = this.filterKey && this.filterKey.toLowerCase()
+      var filterKey = this.filterKey && this.filterKey.toLowerCase();
       var order = this.sortOrders[sortKey] || 1;
       var data = this.data;
       if (filterKey) {
         data = data.filter(function(row) {
           return Object.keys(row).some(function(key) {
-            return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+            return String(row[key]).toLowerCase().indexOf(filterKey) > -1;
           });
-        })
+        });
       }
       if (sortKey) {
         data = data.slice().sort(function(a, b) {
-          a = a[sortKey]
-          b = b[sortKey]
+          a = a[sortKey];
+          b = b[sortKey];
           return (a === b ? 0 : a > b ? 1 : -1) * order;
         });
       }
@@ -84,7 +143,7 @@ var Appointments = Vue.component('appointments', {
   },
   filters: {
     capitalize: function(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1)
+      return str.charAt(0).toUpperCase() + str.slice(1);
     }
   },
   methods: {
