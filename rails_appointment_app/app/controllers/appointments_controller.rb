@@ -28,6 +28,7 @@ class AppointmentsController < ApplicationController
 
     respond_to do |format|
       if check_schedule && @appointment.save
+        appointment_cable(@appointment)
         format.html { redirect_to @appointment, notice: 'Appointment was successfully created.' }
         format.json { render :show, status: :created, location: @appointment }
       else
@@ -105,6 +106,13 @@ class AppointmentsController < ApplicationController
       puts "check_user_appointments #{check_user_appointments} && check_room_appointments #{check_room_appointments}"
 
       check_user_appointments && check_room_appointments
+    end
+
+    def appointment_cable(appointment)
+      ActionCable.server.broadcast(
+        "appointment_channel",
+        appointment
+      )
     end
 
 end

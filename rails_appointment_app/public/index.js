@@ -1,3 +1,12 @@
+(function() {
+  this.App || (this.App = {});
+
+  App.cable = ActionCable.createConsumer();
+
+}).call(this);
+
+// var cable = ActionCable.createConsumer('ws://localhost:3000/cable');
+
 var Home = Vue.component('home',{ 
   template: '#home',
   data: function() {
@@ -18,18 +27,43 @@ var Home = Vue.component('home',{
       ],
       gridData: [],
       loading: true,
-  }},
-  mounted () {
+    };
+  },
+  methods: {},
+  mounted() {
+    // this.$socket.emit('pingServer', 'PING!'); 
     axios
       .get('/appointments.json')
       .then(response => {
         this.gridData = response.data;
       })
       .catch(error => {
-        console.log(error)
+        console.log(error);
       })
       .finally(() => this.loading = false);
-  },
+
+    App.room = App.cable.subscriptions.create("AppointmentChannel", {
+      connected: function() {
+        // Called when the subscription is ready for use on the server
+        console.log('connected');
+      },
+      
+      disconnected: function() {
+        // Called when the subscription has been terminated by the server
+      },
+      
+      received: function(appointment) {
+        // Called when there's incoming data on the websocket for this channel
+        console.log('received',appointment);
+        this.gridData.push(appointment);
+        
+      }.bind(this),
+      
+      speak: function(message) {
+        console.log('speak');
+      },
+    });
+  }, 
 });
 
 var Appointments = Vue.component('appointments', {
@@ -53,20 +87,20 @@ var Appointments = Vue.component('appointments', {
   computed: {
     filteredData: function() {
       var sortKey = this.sortKey;
-      var filterKey = this.filterKey && this.filterKey.toLowerCase()
+      var filterKey = this.filterKey && this.filterKey.toLowerCase();
       var order = this.sortOrders[sortKey] || 1;
       var data = this.data;
       if (filterKey) {
         data = data.filter(function(row) {
           return Object.keys(row).some(function(key) {
-            return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+            return String(row[key]).toLowerCase().indexOf(filterKey) > -1;
           });
-        })
+        });
       }
       if (sortKey) {
         data = data.slice().sort(function(a, b) {
-          a = a[sortKey]
-          b = b[sortKey]
+          a = a[sortKey];
+          b = b[sortKey];
           return (a === b ? 0 : a > b ? 1 : -1) * order;
         });
       }
@@ -75,7 +109,7 @@ var Appointments = Vue.component('appointments', {
   },
   filters: {
     capitalize: function(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1)
+      return str.charAt(0).toUpperCase() + str.slice(1);
     }
   },
   methods: {
@@ -83,6 +117,38 @@ var Appointments = Vue.component('appointments', {
       this.sortKey = key;
       this.sortOrders[key] = this.sortOrders[key] * - 1;
     }
+  }
+});
+
+var Breaks = Vue.component('breaks', {
+  template: '#breaks',
+  props: { data: Array, },
+  // data: function() {},
+  created: function() {
+  },
+  computed: {},
+  filters: {},
+  methods: {
+    isBreak: function(appointment) {
+      console.log(appointment);
+      return appointment.kind === 3;
+    },
+  }
+});
+
+var TwoPeopleMeeting = Vue.component('two-people-meeting', {
+  template: '#two-people-meeting',
+  props: { data: Array, },
+  // data: function() {},
+  created: function() {
+  },
+  computed: {},
+  filters: {},
+  methods: {
+    isSmallMeeting: function(appointment) {
+      console.log(appointment);
+      return appointment.kind === 2;
+    },
   }
 });
 
