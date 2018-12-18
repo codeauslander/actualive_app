@@ -1,12 +1,3 @@
-// import socketio from 'socket.io';
-// import VueSocketIO from 'vue-socket.io';
-// Vue.use(VueSocketIO, SocketInstance);
-// var http = require("http");
-// var url = require('url');
-// var fs = require('fs');
-// console.log(ActionCable);
-// const ActionCable = require('actioncable'); 
-
 (function() {
   this.App || (this.App = {});
 
@@ -14,7 +5,7 @@
 
 }).call(this);
 
-var cable = ActionCable.createConsumer('ws://localhost:3000/cable');
+// var cable = ActionCable.createConsumer('ws://localhost:3000/cable');
 
 var Home = Vue.component('home',{ 
   template: '#home',
@@ -38,6 +29,7 @@ var Home = Vue.component('home',{
       loading: true,
     };
   },
+  methods: {},
   mounted() {
     // this.$socket.emit('pingServer', 'PING!'); 
     axios
@@ -60,44 +52,18 @@ var Home = Vue.component('home',{
         // Called when the subscription has been terminated by the server
       },
       
-      received: function(data) {
+      received: function(appointment) {
         // Called when there's incoming data on the websocket for this channel
-        console.log('received',data);
-        this.gridData.
-      },
+        console.log('received',appointment);
+        this.gridData.push(appointment);
+        
+      }.bind(this),
       
       speak: function(message) {
         console.log('speak');
       },
     });
-      
-    // (function() {
-    //   document.addEventListener('keypress', function(event) {
-    //     // document.addEventListener('keypress','[data-behaivoir~=room_speaker]', function(event) {
-    //     if (event.keyCode === 13) {
-    //       // console.log(App.room);
-    //       App.room.speak(event.target.value);
-    //       event.target.value = '';
-    //       return event.preventDefault();
-    //     }
-    //   });
-      
-    // }).call(this);
-
-  },
-  methods: {
-    subscribe: function() {
-      cable.subscriptions.create('AppointmentChannel', {
-        connected: function() {
-          console.log('connected to rails actioncable Yay!');   
-        } ,
-        received: function(data) {
-          console.log(data);
-        }          
-      });        
-    }
-  }
-  
+  }, 
 });
 
 var Appointments = Vue.component('appointments', {
