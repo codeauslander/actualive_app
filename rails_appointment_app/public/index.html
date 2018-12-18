@@ -49,11 +49,6 @@
         </div>
 
         <two-people-meeting :data="gridData"></two-people-meeting>
-        
-          
-        
-
-        
   </div>
 </template>
 
@@ -147,10 +142,10 @@
           {{appointment.name}}
         </td>
         <td>
-          {{appointment.start_time}}
+          {{appointment.start_time_friendly}}
         </td>
         <td>
-          {{appointment.end_time}}
+          {{appointment.end_time_friendly}}
         </td>
         <td>
           
@@ -177,10 +172,10 @@
           {{appointment.name}}
         </td>
         <td>
-          {{appointment.start_time}}
+          {{appointment.start_time_friendly}}
         </td>
         <td>
-          {{appointment.end_time}}
+          {{appointment.end_time_friendly}}
         </td>
         <td>
           {{appointment.room}}
