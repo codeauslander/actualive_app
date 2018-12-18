@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My App</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/actioncable@5.2.2/lib/assets/compiled/action_cable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+  <script src="https://unpkg.com/vue-socket.io@3.0.4/dist/vue-socketio.js"></script>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.js"></script>
+  
+
+  <script src="index.js" defer></script>
+  <link rel="stylesheet" href="index.css">
+  
+  <!-- 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+   -->
+  
+</head>
+  <body>
+    <!-- app root element -->
+    <div id="app">
+        <router-view></router-view>
+        
+    </div>
+  </body>
+</html>
+
+<template  id="home" v-on:appointmentAdded ="this.gridData.push($event)">
+  <div>
+      <form >
+          Search <input name="query" v-model="searchQuery">
+        </form>
+
+        <div >
+          <breaks style="float: left" :data="gridData" 
+          ></breaks>
+          <appointments
+          :data="gridData"
+          :columns="gridColumns"
+          :filter-key="searchQuery">
+        </appointments>
+          
+        </div>
+
+        <two-people-meeting :data="gridData"></two-people-meeting>
+        
+          
+        
+
+        
+  </div>
+</template>
+
+<template  id="appointments">
+  <table>
+    <thead>
+      <tr>
+        <th v-for="key in columns"
+          @click="sortBy(key)"
+          :class="{ active: sortKey == key }">
+          {{ key | capitalize }}
+          <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
+          </span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="entry in filteredData">
+        <td v-for="key in columns">
+          {{entry[key]}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</template>
+
+<template  id="signup">
+    <div class="">
+      <div class="">
+        <div class="">
+           <h1>Signup</h1>
+        <ul>
+          <li class="" v-for="error in errors">{{ error }}</li>
+        </ul>
+        <div class="">
+          <label>Email:</label>
+          <input type="email" class="" v-model="email">
+        </div>
+        <div class="">
+          <label>Password:</label>
+          <input type="password" class="" v-model="password">
+        </div>
+        <div class="">
+          <label>Password confirmation:</label>
+          <input type="password" class="" v-model="passwordConfirmation">
+        </div>
+        <button class="" v-on:click="submit()">Submit</button>
+        </div>
+      </div>
+    </div>
+</template>
+
+<template  id="login">
+    <div class="">
+      <div class="">
+        <div class=""> 
+          <h1>Login</h1>
+          <ul>
+            <li class="" v-for="error in errors">{{ error }}</li>
+          </ul>
+        
+          <div class="">
+            <label>Email:</label>
+            <input type="email" class="" v-model="email">
+          </div>
+          <div class="">
+            <label>Password:</label>
+            <input type="password" class="" v-model="password">
+          </div>
+          <button class="btn btn-primary" v-on:click="submit()">Submit</button>
+        </div>
+      </div>
+      
+    </div>
+</template>
+
+<template  id="breaks">
+  <!-- <div>Hey</div> -->
+  <table>
+    <thead>
+      <tr>
+        <th>Breaks</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Timer</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="appointment in data" v-if="isBreak(appointment)">
+        <td>
+          {{appointment.name}}
+        </td>
+        <td>
+          {{appointment.start_time}}
+        </td>
+        <td>
+          {{appointment.end_time}}
+        </td>
+        <td>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</template>
+
+<template  id="two-people-meeting">
+  <!-- <div>Hey</div> -->
+  <table>
+    <thead>
+      <tr>
+        <th>Meeting</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Room</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="appointment in data" v-if="isSmallMeeting(appointment)">
+        <td>
+          {{appointment.name}}
+        </td>
+        <td>
+          {{appointment.start_time}}
+        </td>
+        <td>
+          {{appointment.end_time}}
+        </td>
+        <td>
+          {{appointment.room}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</template>
+
