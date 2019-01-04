@@ -1,5 +1,43 @@
 class Api::EventsController < ApplicationController
 
+  def index_eventbrites
+    require 'net/http'
+    require 'openssl'
+    require 'json'
+    
+    puts 'eventbrite_token'
+    puts Rails.application.secrets.eventbrite_token
+
+    uri = URI(
+              'https://www.eventbriteapi.com/v3/events/?'+
+              'listed=' + 'false' + '&' +
+              'token=' + Rails.application.secrets.eventbrite_token
+             )
+  
+    Net::HTTP.start(uri.host, uri.port,
+    :use_ssl => uri.scheme == 'https', 
+    :verify_mode => OpenSSL::SSL::VERIFY_NONE) do |http|
+  
+    request = Net::HTTP::Get.new uri.request_uri
+    # request.basic_auth 'tylerh@firmfoundationsmarketing.com', 'upwork'
+  
+    response = http.request request # Net::HTTPResponse object
+  
+    data = response.body
+    # puts 'data'
+    # puts data
+    @events = JSON.parse(data)['events']
+    @events = @events.select{ |event| 
+      event['start']['timezone'] == "America/Chicago" &&
+      event['is_free'] == true &&
+      event['status'] == "live" &&
+      event_with_in_a_month(event)
+    }
+
+    render json: @events
+    end
+  end
+
   def index
     @events = Even.all
     search_term = params[:search]
@@ -54,5 +92,11 @@ class Api::EventsController < ApplicationController
     @event = Event.find(params[:start_time])
     @event.destroy
     render json: {message: "successfully removed"}
+  end
+
+  private 
+  def event_with_in_a_month(event)
+    days = event['start']['local'].to_datetime - Date.today
+    days < 30
   end
 end
