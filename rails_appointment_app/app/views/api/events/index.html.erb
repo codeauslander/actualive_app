@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TEST PAGE FOR EVENTS INDEX</title>
+</head>
+<body>
+  <% @events.each do |event| %>
+<h4> <%= event["name"]["text"] %> </h4>
+    <% b = event["start"]["local"] %>
+    <% e = event["end"]["local"] %> 
+  <h6> <%= event["description"]["text"] %> </h6>
+  <h6> <%= DateTime.parse(b).strftime("%B %e %Y %l: %M %p")%>  - <%=DateTime.parse(e).strftime("%B %e %Y %l: %M %p") %> </h6>
+        <% end  %>
+      
+
+
+</body>
+</html>

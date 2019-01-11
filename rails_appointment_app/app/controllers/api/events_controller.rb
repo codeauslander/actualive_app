@@ -8,10 +8,13 @@ class Api::EventsController < ApplicationController
     puts 'eventbrite_token'
     puts Rails.application.secrets.eventbrite_token
 
+
     uri = URI(
-              'https://www.eventbriteapi.com/v3/events/?'+
-              'listed=' + 'false' + '&' +
-              'token=' + Rails.application.secrets.eventbrite_token
+              'https://www.eventbriteapi.com/v3/events/search/?categories=102&subcategories=2999,2007,2006,2005,2004&location.address=chicago,IL&location.within=25mi&price=free' +
+
+              # 'https://www.eventbriteapi.com/v3/events/?'+
+              # # 'listed=' + 'false' + '&' +
+              '&token=' + Rails.application.secrets.eventbrite_token
              )
   
     Net::HTTP.start(uri.host, uri.port,
@@ -24,17 +27,25 @@ class Api::EventsController < ApplicationController
     response = http.request request # Net::HTTPResponse object
   
     data = response.body
-    # puts 'data'
-    # puts data
+    puts 'data'
+    puts data
     @events = JSON.parse(data)['events']
-    @events = @events.select{ |event| 
-      event['start']['timezone'] == "America/Chicago" &&
-      event['is_free'] == true &&
-      event['status'] == "live" &&
-      event_with_in_a_month(event)
-    }
-
-    render json: @events
+    # puts @events.count
+    # @events = @events.select{ |event| 
+      # event['start']['timezone'] == "America/Chicago" &&
+      # event['is_free'] == true &&
+      # event['organization_id'] == "17655774301" ||#Thinkful Chicago   
+      # event['organization_id'] == "114418684247"|| #Sowingseedsofjoy.org   
+      # event['organization_id'] == "2890910705" || 
+      # event['organization_id'] == "6859161367" || 
+      # event['organization_id'] == "17707300477"|| #Chicagoruby
+      # event['organization_id'] == "6296306773" || #Fullstack Academy
+      # event['organization_id'] == "2943822513" &&
+      # event_with_in_a_month(event)
+    # }
+    # puts @events.count
+    # render json: @events
+    render 'index.html.erb'
     end
   end
 

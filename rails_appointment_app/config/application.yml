@@ -1,0 +1,11 @@
+#This file is where the ENV variable are.
+
+#These keys are for mark's eventbrite account. 
+# For development only. 
+# New keys will be needed for final version.
+
+OAUTH_CLIENT_SECRET_EVENTBRITE_MARK: RGC5MPIMNR5JA53COVPOFP6XG5CZVICSJEKWTL3QBATMM2P6YE
+
+APPLICATION_KEY_EVENTBRITE_MARK: 6DDQQ4SSLLKEE2IQRE
+
+ANONYMOUS_ACCESS_OAUTH_TOKEN_MARK: 2DPBKTPH2XQXVLG5IOOQ
