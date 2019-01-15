@@ -10,6 +10,7 @@
   <script src="https://unpkg.com/vue/dist/vue.js"></script>
   <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.js"></script>
+  <script src="https://unpkg.com/moment@2.23.0/min/moment.min.js"></script> 
   
 
   <script src="index.js" defer></script>
@@ -53,8 +54,35 @@
   </div>
 </template>
 
+
 <template  id="events">
-  <div>{{events}}</div>
+  <div>
+    <table class ="table2">
+      <thead>
+        <tr v-for="(event, i) in events" :key="i">
+         <th class ="th2">{{event.name.text}}</th>
+         <th class ="th2">{{formatDate(event.start.local)}}</th>
+         <th class ="th2">{{formatDate(event.end.local)}}</th>
+         <th class ="th2">{{event.location}}th>
+         </tr>
+        
+       <!--    <div v-for="(event, i) in events" :key="i"> -->
+          <!-- <h1><div>{{event.name.text}}</div></h1> -->
+  
+        <!--   <h2>Start:</h2> 
+          <strong><h3><div>{{formatDate(event.start.local)}}</div></h3></strong>
+          <strong><h2>End:</h2> 
+        <h3><div>{{formatDate(event.end.local)}}</div></h3></strong> -->
+     
+      </thead>
+    </table>
+    </div>
+  </div>
+          
+  </div>
+  </div>
+
+
 </template>
 
 

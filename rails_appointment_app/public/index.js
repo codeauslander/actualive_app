@@ -138,7 +138,11 @@ var Events = Vue.component('events', {
   },
   computed: {},
   filters: {},
-  methods: {}
+  methods: {
+    formatDate(date) {
+      return moment(date).format('dddd, MMMM Do YYYY, h:mm:ss a');
+    }
+  }
 });
 
 var Breaks = Vue.component('breaks', {
