@@ -38,8 +38,8 @@
         </form>
 
         <div >
-          <breaks style="float: left" :data="gridData" 
-          ></breaks>
+<!--           <breaks style="float: left" :data="gridData" 
+          ></breaks> -->
           <appointments
           :data="gridData"
           :columns="gridColumns"
@@ -47,10 +47,17 @@
         </appointments>
           
         </div>
+        <events></events>
 
-        <two-people-meeting :data="gridData"></two-people-meeting>
+        <!-- <two-people-meeting :data="gridData"></two-people-meeting> -->
   </div>
 </template>
+
+<template  id="events">
+  <div>{{events}}</div>
+</template>
+
+
 
 <template  id="appointments">
   <table>

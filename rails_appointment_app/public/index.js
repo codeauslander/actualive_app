@@ -122,6 +122,25 @@ var Appointments = Vue.component('appointments', {
   }
 });
 
+var Events = Vue.component('events', {
+  template: '#events',
+  data: function() {
+    return { 
+      events: []
+    }
+  },
+  created: function() {
+    axios.get('/api/eventbrites').then(response => {
+      console.log(this)
+      console.log(response);
+      this.events = response.data;
+    })
+  },
+  computed: {},
+  filters: {},
+  methods: {}
+});
+
 var Breaks = Vue.component('breaks', {
   template: '#breaks',
   props: { data: Array, },

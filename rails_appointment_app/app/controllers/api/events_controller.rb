@@ -44,8 +44,8 @@ class Api::EventsController < ApplicationController
       # event_with_in_a_month(event)
     # }
     # puts @events.count
-    # render json: @events
-    render 'index.html.erb'
+    render json: @events
+    # render 'index.html.erb'
     end
   end
 
